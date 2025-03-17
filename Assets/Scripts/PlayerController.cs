@@ -1,18 +1,28 @@
+using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
+    public GameObject PLAYER;
     public InputAction moveUp;
     public InputAction moveDown;
     public InputAction moveLeft;
     public InputAction moveRight;
     public InputAction exit;
+    private GameObject lockScreen;
+    
+    public InputAction use;
     public float speed = 0.0f;
     public Animator animator;
     private float direction = 0.0f;
     public static bool canMove = true;
+    private static bool openedLock = false;
+    private DoorController doorController;
+
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -21,11 +31,15 @@ public class PlayerController : MonoBehaviour
         moveLeft.Enable();
         moveRight.Enable(); 
         exit.Enable();
+        use.Enable();
+        lockScreen = GameObject.Find("LockScreen");
+        lockScreen.SetActive(false);
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
+        //Debug.Log(Input.mousePosition);
         if(canMove == true){
             animator.SetFloat("changeXright", 0);
             animator.SetFloat("changeYright", 0);
@@ -70,6 +84,31 @@ public class PlayerController : MonoBehaviour
         } else {
             animator.SetFloat("changeXright", 0);
             animator.SetFloat("changeYright", 0);
+        }
+
+        if(LockController.getAngleZ() <= 181.0f && LockController.getAngleZ() > 10 && openedLock){
+            LockController.canMove = false;
+            StartCoroutine(openDoor());
+        }
+    }
+
+    IEnumerator openDoor(){
+        yield return new WaitForSecondsRealtime(1);
+        lockScreen.SetActive(false);
+        openedLock = false;
+        canMove = true;
+        doorController.UseDoor(PLAYER);
+    }
+    void OnTriggerStay2D(Collider2D collision)
+    {
+        if(collision.CompareTag("lockedDoor"))
+        {
+            if(use.IsPressed()){
+                doorController = collision.GetComponent<DoorController>();
+                canMove = false;
+                openedLock = true;
+                lockScreen.SetActive(true);
+            }
         }
     }
 }
