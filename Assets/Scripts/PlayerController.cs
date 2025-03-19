@@ -38,8 +38,8 @@ public class PlayerController : MonoBehaviour
         use.Enable();
         lockScreen = GameObject.Find("LockScreen");
         inv1 = GameObject.Find("inv1");
-        inv1.SetActive(false);
         lockScreen.SetActive(false);
+        inv1.SetActive(false);
         useInternal = use;
         useInternal.Enable();
     }
