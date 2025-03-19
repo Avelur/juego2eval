@@ -7,6 +7,7 @@ public class LockController : MonoBehaviour
     public static bool canMove = false;
     public float angle;
     public float smoothness;
+    public AudioSource audioSource;
     public static float AngleZ = 0.0f;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -39,6 +40,7 @@ public class LockController : MonoBehaviour
         }
 
         if(getAngleZ() <= 181.0f && getAngleZ() > 179){
+            audioSource.Play(0);
             StartCoroutine(Reset());
         }
     }

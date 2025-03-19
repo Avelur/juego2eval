@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
     public InputAction exit;
     private static GameObject lockScreen;
     private static GameObject inv1;
+    public AudioSource audioSource;
     
     public InputAction use;
     public static InputAction useInternal;
@@ -119,6 +120,7 @@ public class PlayerController : MonoBehaviour
             }
         }
         if(collision.CompareTag("key")){
+            audioSource.Play(0);
             HaveKey = true;
             inv1.SetActive(true);
             key = collision.gameObject;
