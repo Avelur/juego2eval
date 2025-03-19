@@ -7,7 +7,7 @@ public class DialogueController : MonoBehaviour
 {
     
     public TextMeshProUGUI dialogueText;
-    private static String Sentences;
+    private static string Sentences;
     public float DialogueSpeed;
     private static bool active = false;
     private static bool textFinished = true;

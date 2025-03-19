@@ -12,15 +12,19 @@ public class PlayerController : MonoBehaviour
     public InputAction moveLeft;
     public InputAction moveRight;
     public InputAction exit;
-    private GameObject lockScreen;
+    private static GameObject lockScreen;
+    private static GameObject inv1;
     
     public InputAction use;
+    public static InputAction useInternal;
     public float speed = 0.0f;
     public Animator animator;
     private float direction = 0.0f;
     public static bool canMove = true;
     private static bool openedLock = false;
     private DoorController doorController;
+    private GameObject key;
+    public static bool HaveKey = false;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -33,7 +37,11 @@ public class PlayerController : MonoBehaviour
         exit.Enable();
         use.Enable();
         lockScreen = GameObject.Find("LockScreen");
+        inv1 = GameObject.Find("inv1");
+        inv1.SetActive(false);
         lockScreen.SetActive(false);
+        useInternal = use;
+        useInternal.Enable();
     }
 
     // Update is called once per frame
@@ -96,8 +104,8 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSecondsRealtime(1);
         lockScreen.SetActive(false);
         openedLock = false;
-        canMove = true;
         doorController.UseDoor(PLAYER);
+        canMove = true;
     }
     void OnTriggerStay2D(Collider2D collision)
     {
@@ -105,10 +113,16 @@ public class PlayerController : MonoBehaviour
         {
             if(use.IsPressed()){
                 doorController = collision.GetComponent<DoorController>();
-                canMove = false;
                 openedLock = true;
                 lockScreen.SetActive(true);
+                canMove = false;
             }
+        }
+        if(collision.CompareTag("key")){
+            HaveKey = true;
+            inv1.SetActive(true);
+            key = collision.gameObject;
+            Destroy(key);
         }
     }
 }
