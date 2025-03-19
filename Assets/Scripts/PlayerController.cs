@@ -94,7 +94,7 @@ public class PlayerController : MonoBehaviour
             animator.SetFloat("changeYright", 0);
         }
 
-        if(LockController.getAngleZ() <= 181.0f && LockController.getAngleZ() > 10 && openedLock){
+        if(LockController.getAngleZ() <= 181.0f && LockController.getAngleZ() > 179 && openedLock){
             LockController.canMove = false;
             StartCoroutine(openDoor());
         }

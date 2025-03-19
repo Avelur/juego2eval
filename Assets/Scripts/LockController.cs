@@ -8,20 +8,19 @@ public class LockController : MonoBehaviour
     public float angle;
     public float smoothness;
     public static float AngleZ = 0.0f;
-    float initMousePosition = 0.0f;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        initMousePosition = Input.mousePosition.x;
+        
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
         float changed = Input.mousePosition.x/600;
         if(canMove){
             float tiltAroundZ = changed * angle;
-            if(tiltAroundZ > -10) {
+            if(tiltAroundZ < -10) {
                 float fix = tiltAroundZ * -1;
                 tiltAroundZ = fix;
             }
@@ -32,9 +31,14 @@ public class LockController : MonoBehaviour
             // Dampen towards the target rotation
             transform.rotation = Quaternion.Slerp(transform.rotation, target,  Time.deltaTime * smoothness);
             AngleZ = transform.eulerAngles.z;
+            /*
+            if(transform.rotation.eulerAngles.z > 5){
+                transform.rotation = Quaternion.Euler(0,0,0);
+            }
+            */
         }
 
-        if(getAngleZ() <= 181.0f && getAngleZ() > 10){
+        if(getAngleZ() <= 181.0f && getAngleZ() > 179){
             StartCoroutine(Reset());
         }
     }
